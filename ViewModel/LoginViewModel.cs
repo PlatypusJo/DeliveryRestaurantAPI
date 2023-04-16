@@ -13,6 +13,7 @@ namespace BackAPI.ViewModel
         [Display(Name = "Пароль")]
         public string Password { get; set; } = null!;
 
+        [Required]
         [Display(Name = "Запомнить?")]
         public bool RememberMe { get; set; }
     }

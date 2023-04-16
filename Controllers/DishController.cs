@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackAPI.DTO;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -96,6 +98,7 @@ namespace BackAPI.Controllers
 
         // POST api/<DishController>
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<DishDTO>> Post([FromBody] DishDTO dish)
         {
             {
@@ -137,6 +140,7 @@ namespace BackAPI.Controllers
 
         // PUT api/<DishController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<DishDTO>> Put([FromRoute] int id, [FromBody] DishDTO dishDTO)
         {
             if (!ModelState.IsValid)
@@ -175,6 +179,7 @@ namespace BackAPI.Controllers
 
         // DELETE api/<DishController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (!ModelState.IsValid)
