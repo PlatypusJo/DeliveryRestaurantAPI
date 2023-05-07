@@ -1,4 +1,6 @@
-﻿namespace BackAPI.DTO
+﻿using BackAPI.Models1;
+
+namespace BackAPI.DTO
 {
     public class DishDTO
     {
@@ -15,6 +17,8 @@
         public string DishCost { get; set; } = null!;
 
         public string? DishImage { get; set; }
+
+        public virtual ICollection<IngredientStringDTO> IngredientStringsDTO { get; } = new List<IngredientStringDTO>();
 
     }
 }
