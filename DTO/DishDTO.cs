@@ -8,13 +8,13 @@ namespace BackAPI.DTO
 
         public string DishName { get; set; } = null!;
 
-        public string DishGrammers { get; set; } = null!;
+        public int DishGrammers { get; set; }
 
         public string? CategoryName { get; set; }
 
         public int CategoryFk { get; set; }
 
-        public string DishCost { get; set; } = null!;
+        public int DishCost { get; set; }
 
         public string? DishImage { get; set; }
 

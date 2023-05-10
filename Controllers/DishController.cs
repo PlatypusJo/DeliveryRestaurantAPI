@@ -31,10 +31,10 @@ namespace BackAPI.Controllers
                 DishDTO dishDTO = new DishDTO()
                 {
                     DishId = d.DishId,
-                    DishCost = Convert.ToString(d.DishCost),
+                    DishCost = d.DishCost,
                     DishName = d.DishName,
                     CategoryFk = d.CategoryFk,
-                    DishGrammers = Convert.ToString(d.DishGrammers),
+                    DishGrammers = d.DishGrammers,
                     DishImage = d.DishImage
                 };
                 dishDTOs.Add(dishDTO);
@@ -71,10 +71,10 @@ namespace BackAPI.Controllers
                     dishDTO = new DishDTO()
                     {
                         DishId = d.DishId,
-                        DishCost = Convert.ToString(d.DishCost),
+                        DishCost = d.DishCost,
                         DishName = d.DishName,
                         CategoryFk = d.CategoryFk,
-                        DishGrammers = Convert.ToString(d.DishGrammers),
+                        DishGrammers = d.DishGrammers,
                         DishImage = d.DishImage
                     };
                     break;
@@ -141,7 +141,7 @@ namespace BackAPI.Controllers
         // PUT api/<DishController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<DishDTO>> Put([FromRoute] int id, [FromBody] DishDTO dishDTO)
+        public async Task<ActionResult<List<DishDTO>>> Put([FromRoute] int id, [FromBody] DishDTO dishDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -157,7 +157,7 @@ namespace BackAPI.Controllers
             dish.DishName = dishDTO.DishName;
             dish.CategoryFk = dishDTO.CategoryFk;
             dish.DishGrammers = Convert.ToInt32(dishDTO.DishGrammers);
-            dish.DishImage = dish.DishImage;
+            dish.DishImage = dishDTO.DishImage;
             await foreach (var category in _context.Categories)
             {
                 if (category.CategoryId == dish.CategoryFk)
@@ -174,7 +174,7 @@ namespace BackAPI.Controllers
             }
             _context.Dishes.Update(dish);
             await _context.SaveChangesAsync();
-            return NoContent();
+            return await GetDish();
         }
 
         // DELETE api/<DishController>/5
