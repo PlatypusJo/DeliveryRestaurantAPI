@@ -50,6 +50,31 @@ namespace BackAPI.Controllers
                     }
                 }
             }
+            foreach(var d in dishDTOs)
+            {
+                await foreach (var str in _context.IngredientStrings)
+                {
+                    if (str.DishFk == d.DishId)
+                    {
+                        IngredientStringDTO ing = new IngredientStringDTO
+                        {
+                            IngredientStringId = str.IngredientStringId,
+                            IngredientFk = str.IngredientFk,
+                            DishFk = str.DishFk,
+                        };
+                        d.IngredientStringsDTO.Add(ing);
+                    }
+                }
+                foreach (var str in d.IngredientStringsDTO)
+                {
+                    var i = await _context.Ingredients.FindAsync(str.IngredientFk);
+                    if (i == null)
+                    {
+                        return NotFound();
+                    }
+                    str.IngredientName = i.IngredientName;
+                }
+            }
             return dishDTOs;
         }
 
@@ -168,9 +193,44 @@ namespace BackAPI.Controllers
                     break;
                 }
             }
+            await foreach(var strIng in _context.IngredientStrings)
+            {
+                //if (strIng.DishFk == dish.DishId)
+                //{
+                //    dish.IngredientStrings.Add(strIng);
+                //}
+            }
             if (!isExist)
             {
                 return NotFound();
+            }
+            List<IngredientString> deleting = new List<IngredientString>();
+            foreach(var str in dish.IngredientStrings)
+            {
+                bool isExisting = false;
+                foreach(var newStr in dishDTO.IngredientStringsDTO)
+                {
+                    if (str.IngredientStringId == newStr.IngredientStringId)
+                    {
+                        isExisting = true;
+                        str.IngredientFk = newStr.IngredientFk;
+                        str.DishFk = newStr.DishFk;
+                        _context.IngredientStrings.Update(str);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                if (!isExisting)
+                {
+                    //dish.IngredientStrings.Remove(str);
+                    //_context.IngredientStrings.Remove(str);
+                    //await _context.SaveChangesAsync();
+                    deleting.Add(str);
+                }
+            }
+            foreach(var str in deleting)
+            {
+                _context.IngredientStrings.Remove(str);
+                await _context.SaveChangesAsync();
             }
             _context.Dishes.Update(dish);
             await _context.SaveChangesAsync();
@@ -190,6 +250,13 @@ namespace BackAPI.Controllers
             if (dish == null)
             {
                 return NotFound();
+            }
+            await foreach (var inStr in _context.IngredientStrings)
+            {
+                if (dish.DishId == inStr.DishFk)
+                {
+                    _context.IngredientStrings.Remove(inStr);
+                }
             }
             _context.Dishes.Remove(dish);
             await _context.SaveChangesAsync();

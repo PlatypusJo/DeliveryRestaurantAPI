@@ -18,7 +18,7 @@ namespace BackAPI.DTO
 
         public string? DishImage { get; set; }
 
-        public virtual ICollection<IngredientStringDTO> IngredientStringsDTO { get; } = new List<IngredientStringDTO>();
+        public virtual ICollection<IngredientStringDTO> IngredientStringsDTO { get; set; } = new List<IngredientStringDTO>();
 
     }
 }
