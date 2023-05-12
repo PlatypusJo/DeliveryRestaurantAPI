@@ -2,6 +2,9 @@
 
 namespace BackAPI.ViewModel
 {
+    /// <summary>
+    /// Класс ViewModel для отображения данных регисрируемого пользователяв
+    /// </summary>
     public class RegisterViewModel
     {
         [Required]

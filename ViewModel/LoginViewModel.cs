@@ -2,6 +2,9 @@
 
 namespace BackAPI.ViewModel
 {
+    /// <summary>
+    /// Класс ViewModel для отображения данных входящего пользователя
+    /// </summary>
     public class LoginViewModel
     {
         [Required]

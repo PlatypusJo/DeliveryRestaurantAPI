@@ -4,6 +4,11 @@ namespace BackAPI.Data
 {
     public class RestaurantDeliveryContextSeed
     {
+        /// <summary>
+        /// Инициализирует передаваемый контекст БД значениями по умолчанию если в нём нет данных
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
+        /// <returns></returns>
         public static async Task Initialize(RestaurantDeliveryContext context)
         {
             try

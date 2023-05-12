@@ -9,22 +9,37 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackAPI.Controllers
 {
+    /// <summary>
+    /// Контроллер ингредиента для выполнения запросов на сервер
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class IngredientController : ControllerBase
     {
         private readonly RestaurantDeliveryContext _context;
+        /// <summary>
+        /// Конструктор контроллера ингредиента, получающий в качестве параметра контекст БД
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public IngredientController(RestaurantDeliveryContext context)
         {
             _context = context;
         }
+        /// <summary>
+        /// Получение всех ингредиентов из БД
+        /// </summary>
+        /// <returns>Список ингредиентов</returns>
         // GET: api/<IngredientController>
         [HttpGet]
         public async Task<ActionResult<List<Ingredient>>> GetIngredient()
         {
             return await _context.Ingredients.ToListAsync();
         }
-
+        /// <summary>
+        /// Получение ингредиента из БД по id
+        /// </summary>
+        /// <param name="id">id искомого ингредиента</param>
+        /// <returns>искомый ингредиент</returns>
         // GET api/<IngredientController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ingredient>> GetIngredient(int id)
@@ -36,7 +51,11 @@ namespace BackAPI.Controllers
             }
             return Ok(ingredient);
         }
-
+        /// <summary>
+        /// Создание нового ингредиента в БД
+        /// </summary>
+        /// <param name="ingredient">новый ингредиент</param>
+        /// <returns>добавленный ингредиент</returns>
         // POST api/<IngredientController>
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -55,7 +74,12 @@ namespace BackAPI.Controllers
             ingredient.IngredientId = ingredient1.IngredientId;
             return CreatedAtAction("GetIngredient", new { id = ingredient.IngredientId }, ingredient);
         }
-
+        /// <summary>
+        /// Изменение существующего ингредиента в БД
+        /// </summary>
+        /// <param name="id">id изменяемого ингредиента</param>
+        /// <param name="newIngredient">изменённый ингредиент, содержит обновлённые данные</param>
+        /// <returns></returns>
         // PUT api/<IngredientController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
@@ -75,7 +99,11 @@ namespace BackAPI.Controllers
             await _context.SaveChangesAsync();
             return await GetIngredient();
         }
-
+        /// <summary>
+        /// Удаление ингредиента и связанных с ним сущности по id из БД
+        /// </summary>
+        /// <param name="id">id удаляемого ингредиента</param>
+        /// <returns>Статус выполнения запроса</returns>
         // DELETE api/<IngredientController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]

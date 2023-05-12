@@ -11,16 +11,27 @@ using System.Data;
 
 namespace BackAPI.Controllers
 {
+    /// <summary>
+    /// Контроллер блюда для выполнения запросов на сервере
+    /// </summary>
     [Route("api/[controller]")]
     [EnableCors]
     [ApiController]
     public class DishController : ControllerBase
     {
         private readonly RestaurantDeliveryContext _context;
+        /// <summary>
+        /// Конструктор контроллера блюда, получающий в качестве параметра контекст БД
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public DishController(RestaurantDeliveryContext context)
         {
             _context = context;
         }
+        /// <summary>
+        /// Получение всех блюд из БД
+        /// </summary>
+        /// <returns>Список DTO блюд</returns>
         // GET: api/<DishController>
         [HttpGet]
         public async Task<ActionResult<List<DishDTO>>> GetDish()
@@ -77,7 +88,11 @@ namespace BackAPI.Controllers
             }
             return dishDTOs;
         }
-
+        /// <summary>
+        /// Получает блюдо по id из БД
+        /// </summary>
+        /// <param name="id">id блюда</param>
+        /// <returns>DTO искомого блюда</returns>
         // GET api/<DishController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DishDTO>> GetDish(int id)
@@ -120,7 +135,11 @@ namespace BackAPI.Controllers
             }
             return NotFound();
         }
-
+        /// <summary>
+        /// Создание нового блюда в БД
+        /// </summary>
+        /// <param name="dish">DTO блюда</param>
+        /// <returns>DTO добавленного блюда</returns>
         // POST api/<DishController>
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -162,7 +181,12 @@ namespace BackAPI.Controllers
                 return CreatedAtAction("GetDish", new { id = dish.DishId }, dish);
             }
         }
-
+        /// <summary>
+        /// Изменение существующего блюда и его ингредиентов в БД
+        /// </summary>
+        /// <param name="id">id изменяемого блюда</param>
+        /// <param name="dishDTO">DTO изменяемого блюда, содержит обновлённые данные</param>
+        /// <returns></returns>
         // PUT api/<DishController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
@@ -236,7 +260,11 @@ namespace BackAPI.Controllers
             await _context.SaveChangesAsync();
             return await GetDish();
         }
-
+        /// <summary>
+        /// Удаляет блюдо и связанные с ним сущности по id из БД
+        /// </summary>
+        /// <param name="id">id удаляемого блюда</param>
+        /// <returns>Статус выполнения запроса</returns>
         // DELETE api/<DishController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]

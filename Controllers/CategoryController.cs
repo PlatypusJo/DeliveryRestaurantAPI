@@ -10,24 +10,38 @@ using System.Data;
 
 namespace BackAPI.Controllers
 {
+    /// <summary>
+    /// Контроллер категории блюда для выполнения запросов на сервер
+    /// </summary>
     [Route("api/[controller]")]
     [EnableCors]
     [ApiController]
     public class CategoryController : ControllerBase
     {
         private readonly RestaurantDeliveryContext _context;
+        /// <summary>
+        /// Конструктор контроллера категорий блюд, получающий в качестве параметра контекст БД
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public CategoryController(RestaurantDeliveryContext context)
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Получение всех категорий из БД
+        /// </summary>
+        /// <returns>Список всех категорий</returns>
         // GET: api/<CategoryController>
         [HttpGet]
         public async Task<ActionResult<List<Category>>> GetCategory()
         {
             return await _context.Categories.ToListAsync();
         }
-
+        /// <summary>
+        /// Получение категории по id из БД
+        /// </summary>
+        /// <param name="id">id искомой категории</param>
+        /// <returns>искомая категория</returns>
         // GET api/<CategoryController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
@@ -39,7 +53,11 @@ namespace BackAPI.Controllers
             }
             return Ok(category);
         }
-
+        /// <summary>
+        /// Создание новой категории в БД
+        /// </summary>
+        /// <param name="category">новая категория</param>
+        /// <returns>добавленная категория</returns>
         // POST api/<CategoryController>
         [HttpPost]
         [Authorize(Roles = "admin")]
@@ -58,7 +76,12 @@ namespace BackAPI.Controllers
             category.CategoryId = category1.CategoryId;
             return CreatedAtAction("GetUser", new { id = category.CategoryId }, category);
         }
-
+        /// <summary>
+        /// Изменение существующей категории в БД
+        /// </summary>
+        /// <param name="id">id изменяемой категории</param>
+        /// <param name="newCategory">изменённая категория, содержащая обновлённые данные</param>
+        /// <returns></returns>
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
@@ -78,7 +101,11 @@ namespace BackAPI.Controllers
             await _context.SaveChangesAsync();
             return await GetCategory();
         }
-
+        /// <summary>
+        /// Удаляет категорию и связанные с ней сущности по id из БД
+        /// </summary>
+        /// <param name="id">id удаляемой категории</param>
+        /// <returns>Статус выполнения запроса</returns>
         // DELETE api/<CategoryController>/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]

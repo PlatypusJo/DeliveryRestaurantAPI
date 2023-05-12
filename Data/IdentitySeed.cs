@@ -5,6 +5,11 @@ namespace BackAPI.Data
 {
     public static class IdentitySeed
     {
+        /// <summary>
+        /// Создание ролей пользователей (админ и обычный пользователь), создаёт объекты с такими ролями если их нет
+        /// </summary>
+        /// <param name="serviceProvider">Стандартный набор сервисов</param>
+        /// <returns></returns>
         public static async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();

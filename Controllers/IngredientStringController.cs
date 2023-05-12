@@ -2,30 +2,37 @@
 using BackAPI.DTO;
 using BackAPI.Models1;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace BackAPI.Controllers
 {
 
-    
+    /// <summary>
+    /// Контроллер строки ингредиента для выполнения запросов на сервер
+    /// </summary>
 
     [Route("api/[controller]")]
     [ApiController]
+
     public class IngredientStringController : ControllerBase
     {
         private readonly RestaurantDeliveryContext _context;
+        /// <summary>
+        /// Конструктор контроллера, принимающий в качестве параметра контекст БД
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public IngredientStringController(RestaurantDeliveryContext context)
         {
             _context = context;
         }
-        // GET: api/<IngredientStringController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
+        /// <summary>
+        /// Получение строки ингредиента по id из БД
+        /// </summary>
+        /// <param name="id">id искомой строки ингредиента</param>
+        /// <returns>DTO строки ингредиента</returns>
         // GET api/<IngredientStringController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<IngredientStringDTO>> Get(int id)
@@ -64,9 +71,14 @@ namespace BackAPI.Controllers
             }
             return NotFound();
         }
-
+        /// <summary>
+        /// Создание новой строки ингредиента в БД
+        /// </summary>
+        /// <param name="val">DTO новой строки ингредиента</param>
+        /// <returns>DTO созданной строки ингредиента</returns>
         // POST api/<IngredientStringController>
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IngredientStringDTO>> Post([FromBody] IngredientStringDTO val)
         {
             if (!ModelState.IsValid)
@@ -82,18 +94,6 @@ namespace BackAPI.Controllers
             await _context.SaveChangesAsync();
             val.IngredientStringId = ingStr.IngredientStringId;
             return CreatedAtAction("Get", new { id = ingStr.IngredientStringId }, ingStr);
-        }
-
-        // PUT api/<IngredientStringController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<IngredientStringController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
