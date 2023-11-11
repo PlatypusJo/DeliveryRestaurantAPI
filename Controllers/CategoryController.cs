@@ -71,10 +71,10 @@ namespace BackAPI.Controllers
             {
                 CategoryName = category.CategoryName,
             };
-            _context.Categories.Add(category);
+            _context.Categories.Add(category1);
             await _context.SaveChangesAsync();
             category.CategoryId = category1.CategoryId;
-            return CreatedAtAction("GetUser", new { id = category.CategoryId }, category);
+            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
         }
         /// <summary>
         /// Изменение существующей категории в БД
